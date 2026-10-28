@@ -1,0 +1,6 @@
+{
+  "name": "FolioCurl — Interactive Novel Flipbook Reader",
+  "description": "Free online 3D Flipbook Maker (FlipApp 3D). Convert PDF catalogs, magazines, brochures, menus, and lookbooks into realistic 3D page-turning flipbooks with sound and standalone offline HTML export.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

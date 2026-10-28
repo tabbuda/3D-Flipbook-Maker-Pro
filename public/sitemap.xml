@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <!-- Primary Landing & Live 3D Studio Showcase -->
+  <url>
+    <loc>https://3d-flipbook-maker.vercel.app/</loc>
+    <lastmod>2026-10-27</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://3d-flipbook-maker.vercel.app/icon-512.png</image:loc>
+      <image:title>3D Flipbook Maker (FlipApp 3D) - Free PDF to 3D Flipbook Converter</image:title>
+    </image:image>
+  </url>
+
+  <!-- Core Application Views -->
+  <url>
+    <loc>https://3d-flipbook-maker.vercel.app/?view=pdf-to-flipbook</loc>
+    <lastmod>2026-10-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://3d-flipbook-maker.vercel.app/?view=studio</loc>
+    <lastmod>2026-10-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://3d-flipbook-maker.vercel.app/?view=templates</loc>
+    <lastmod>2026-10-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+
+  <!-- High-Intent Search & Industry Use Case Deep Links -->
+  <url>
+    <loc>https://3d-flipbook-maker.vercel.app/?usecase=flipsnack-alternative</loc>
+    <lastmod>2026-10-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://3d-flipbook-maker.vercel.app/?usecase=digital-catalog-maker</loc>
+    <lastmod>2026-10-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://3d-flipbook-maker.vercel.app/?usecase=restaurant-qr-menu</loc>
+    <lastmod>2026-10-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://3d-flipbook-maker.vercel.app/?usecase=digital-magazine-creator</loc>
+    <lastmod>2026-10-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://3d-flipbook-maker.vercel.app/?usecase=pitch-deck-flipbook</loc>
+    <lastmod>2026-10-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- LLM & Generative Engine Structured Text Endpoints -->
+  <url>
+    <loc>https://3d-flipbook-maker.vercel.app/llms.txt</loc>
+    <lastmod>2026-10-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://3d-flipbook-maker.vercel.app/llms-full.txt</loc>
+    <lastmod>2026-10-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+</urlset>

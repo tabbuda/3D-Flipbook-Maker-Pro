@@ -1,0 +1,725 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  .font-serif-editorial {
+    font-family: 'Playfair Display', Georgia, Cambria, serif;
+  }
+
+  .font-mono-code {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  }
+}
+
+/* Universal Sleek Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.35);
+  border-radius: 9999px;
+  border: 1px solid transparent;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(71, 85, 105, 0.65);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100, 116, 139, 0.35) transparent;
+}
+
+/* Utility to hide scrollbars on pill bars and tab lists */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+:root {
+  --bg-stage: #edf1ef;
+  --bg-stage-gradient: radial-gradient(
+    circle at 50% 42%,
+    #f8faf9 0%,
+    #e5ece8 65%,
+    #dbe4df 100%
+  );
+  --page-bg: #ffffff;
+  --text-main: #091e16;
+  --text-muted: #4b5e57;
+  --accent-green: #047857;
+  --accent-green-dark: #064e3b;
+  --accent-green-light: #ecfdf5;
+  --gold-accent: #c9a84e;
+  --border-subtle: #dde6e1;
+  --shadow-book:
+    0 24px 54px -12px rgba(9, 30, 22, 0.22),
+    0 10px 24px -8px rgba(0, 0, 0, 0.1);
+  --book-radius: 6px;
+
+  /* Dynamic A4 Standard Aspect Ratio (1 : 1.4142 / Width : Height) */
+  --page-w: 400px;
+  --page-h: 566px;
+  --page-scale: 1;
+  --anim-speed: 0.58s;
+
+  /* Proportional Inner Content Sizing based on Page Scale */
+  --title-size: calc(22px * var(--page-scale));
+  --body-size: calc(12.5px * var(--page-scale));
+  --icon-box-size: calc(24px * var(--page-scale));
+  --icon-svg-size: calc(18px * var(--page-scale));
+  --list-gap: calc(8px * var(--page-scale));
+  --item-gap: calc(6px * var(--page-scale));
+  --page-pad-v: calc(13px * var(--page-scale));
+  --page-pad-h: calc(15px * var(--page-scale));
+  --title-margin-b: calc(8px * var(--page-scale));
+  --title-margin-t: calc(2px * var(--page-scale));
+  --footer-size: calc(9px * var(--page-scale));
+  --footer-pad-t: calc(5px * var(--page-scale));
+  --footer-margin-t: calc(5px * var(--page-scale));
+
+  /* Watermark Arc Ring */
+  --watermark-size: calc(240px * var(--page-scale));
+  --watermark-offset: calc(-50px * var(--page-scale));
+}
+
+/* Stage Wrapper - Natural zero-scroll reading experience */
+#flipbook-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+  padding: 12px 16px;
+  background: var(--bg-stage);
+  background-image: var(--bg-stage-gradient);
+}
+
+#flipbook-wrapper.is-pseudo-fullscreen {
+  position: fixed !important;
+  inset: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  z-index: 2147483647 !important;
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+}
+
+#flipbook-wrapper:fullscreen {
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+}
+
+#flipbook-wrapper:-webkit-full-screen {
+  width: 100vw !important;
+  height: 100vh !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+}
+
+body.flipbook-fullscreen-active {
+  overflow: hidden !important;
+}
+
+body.flipbook-fullscreen-active *:has(#flipbook-wrapper.is-pseudo-fullscreen) {
+  transform: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  perspective: none !important;
+  animation: none !important;
+  contain: none !important;
+  z-index: 2147483647 !important;
+}
+
+body.flipbook-fullscreen-active > div > header,
+body.flipbook-fullscreen-active aside,
+body.flipbook-fullscreen-active footer {
+  z-index: 1 !important;
+}
+
+
+/* Top-Right Floating Controls (Download, Fullscreen, Sound) */
+.top-floating-controls {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 30;
+  pointer-events: auto;
+}
+
+.float-icon-btn {
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(14, 107, 78, 0.14);
+  color: #1a2e26;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0.92;
+  outline: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  pointer-events: auto;
+}
+
+.float-icon-btn:hover {
+  opacity: 1;
+  transform: scale(1.08);
+  background: #ffffff;
+  color: var(--accent-green);
+  box-shadow: 0 4px 14px rgba(14, 107, 78, 0.15);
+}
+
+.float-icon-btn:active {
+  transform: scale(0.95);
+}
+
+.float-icon-btn svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 1.85;
+}
+
+/* Bottom Navigation Curved Arrows */
+.corner-nav-btn {
+  position: absolute;
+  bottom: 22px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(14, 107, 78, 0.14);
+  border-radius: 50%;
+  color: #122920;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 30;
+  transition: all 0.2s ease;
+  opacity: 0.92;
+  outline: none;
+  box-shadow: 0 4px 12px rgba(10, 32, 23, 0.08);
+  pointer-events: auto;
+}
+
+.corner-nav-btn:hover:not(:disabled) {
+  opacity: 1;
+  transform: scale(1.1);
+  background: #ffffff;
+  color: var(--accent-green);
+  box-shadow: 0 6px 18px rgba(14, 107, 78, 0.2);
+}
+
+.corner-nav-btn:active:not(:disabled) {
+  transform: scale(0.92);
+}
+
+.corner-nav-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.corner-nav-btn svg {
+  width: 28px;
+  height: 28px;
+  stroke-width: 2.2;
+}
+
+.corner-nav-btn.btn-prev-corner {
+  left: 22px;
+}
+
+.corner-nav-btn.btn-next-corner {
+  right: 22px;
+}
+
+/* Center Book Stage */
+.book-stage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  perspective: 2500px;
+  touch-action: pan-y;
+}
+
+/* 3D Book Container */
+.flipbook-container {
+  position: relative;
+  width: calc(var(--page-w) * 2);
+  height: var(--page-h);
+  transform-style: preserve-3d;
+  transition:
+    transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    width 0.3s ease,
+    height 0.3s ease;
+  border-radius: var(--book-radius);
+  background: transparent;
+  box-shadow: none;
+}
+
+.stf__item.--simple {
+  box-shadow:
+    0 16px 38px -10px rgba(0, 0, 0, 0.16),
+    0 6px 16px -4px rgba(0, 0, 0, 0.08);
+}
+
+/* Desktop Book Position adjustment when closed on Cover or Back Cover */
+.flipbook-container.is-cover-closed {
+  transform: translateX(-25%);
+  box-shadow: none !important;
+}
+
+.flipbook-container.is-back-closed {
+  transform: translateX(25%);
+  box-shadow: none !important;
+}
+
+/* Precise single-page shadow when closed on front cover or back cover */
+.flipbook-container.is-cover-closed .book-leaf:first-child .leaf-face.face-front,
+.flipbook-container.is-cover-closed .book-leaf[data-leaf-index="0"] .leaf-face.face-front {
+  box-shadow:
+    0 18px 45px -10px rgba(0, 0, 0, 0.2),
+    0 6px 18px -4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.flipbook-container.is-back-closed .book-leaf:last-child .leaf-face.face-back,
+.flipbook-container.is-back-closed .book-leaf.flipped:last-child .leaf-face.face-back {
+  box-shadow:
+    0 18px 45px -10px rgba(0, 0, 0, 0.2),
+    0 6px 18px -4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.flipbook-container.is-cover-closed .book-spine-shadow,
+.flipbook-container.is-back-closed .book-spine-shadow {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Mobile Single-Page Layout */
+.is-mobile .flipbook-container,
+.flipbook-container.is-mobile {
+  width: var(--page-w) !important;
+  border-radius: 8px;
+  transform: translateX(0);
+  transition:
+    transform var(--anim-speed) cubic-bezier(0.2, 0.8, 0.25, 1),
+    width 0.3s ease,
+    height 0.3s ease;
+  box-shadow:
+    0 14px 34px -8px rgba(0, 0, 0, 0.15),
+    0 4px 12px -3px rgba(0, 0, 0, 0.06);
+}
+
+.is-mobile .flipbook-container.is-cover-closed,
+.flipbook-container.is-mobile.is-cover-closed {
+  transform: translateX(0) !important;
+}
+
+.is-mobile .flipbook-container.is-back-closed,
+.flipbook-container.is-mobile.is-back-closed {
+  transform: translateX(0) !important;
+}
+
+/* Center Spine Shadow */
+.book-spine-shadow {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 32px;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.04) 35%,
+    rgba(0, 0, 0, 0.09) 50%,
+    rgba(0, 0, 0, 0.04) 65%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  z-index: 2;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+}
+
+.is-mobile .book-spine-shadow {
+  display: none;
+}
+
+/* 3D Leaf Sheet */
+.book-leaf {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: var(--page-w);
+  height: 100%;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  transition: transform var(--anim-speed) cubic-bezier(0.2, 0.8, 0.25, 1);
+  will-change: transform;
+  cursor: pointer;
+  border-radius: var(--book-radius);
+  /* Do not apply dark box-shadow on every leaf to prevent dirty staircase stacking when 100+ pages exist */
+  box-shadow: none;
+}
+
+.book-leaf.flipped {
+  transform: rotateY(-180deg);
+}
+
+.book-leaf.is-flipping {
+  /* Dynamic 3D lift shadow only while turning */
+  box-shadow:
+    0 22px 40px -10px rgba(0, 0, 0, 0.25),
+    0 8px 16px -4px rgba(0, 0, 0, 0.12);
+  z-index: 100 !important;
+}
+
+.is-mobile .book-leaf {
+  left: 0;
+  right: auto;
+}
+
+/* Leaf Front & Back Faces */
+.leaf-face {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+  background-color: var(--page-bg);
+  box-sizing: border-box;
+  padding: 0 !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.leaf-face.face-front {
+  z-index: 2;
+  border-top-right-radius: var(--book-radius);
+  border-bottom-right-radius: var(--book-radius);
+  background-image: linear-gradient(
+    to left,
+    #ffffff 0%,
+    #fafcfb 80%,
+    #f2f5f3 100%
+  );
+  box-shadow: inset 14px 0 18px -10px rgba(0, 0, 0, 0.05);
+  border-left: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.leaf-face.face-back {
+  transform: rotateY(180deg);
+  z-index: 1;
+  border-top-left-radius: var(--book-radius);
+  border-bottom-left-radius: var(--book-radius);
+  background-image: linear-gradient(
+    to right,
+    #ffffff 0%,
+    #fafcfb 80%,
+    #f2f5f3 100%
+  );
+  box-shadow: inset -14px 0 18px -10px rgba(0, 0, 0, 0.05);
+  border-right: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+/* Mobile Face Overrides */
+.is-mobile .leaf-face,
+.flipbook-container.is-mobile .leaf-face {
+  border-radius: 8px !important;
+  box-sizing: border-box !important;
+}
+
+.is-mobile .leaf-face:not(.is-cover),
+.flipbook-container.is-mobile .leaf-face:not(.is-cover) {
+  padding: 0 !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+  background-image: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    #fafcfb 100%
+  ) !important;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Cover Leaf Overrides */
+.leaf-face.is-cover {
+  padding: 0 !important;
+}
+
+.leaf-face.cover-front {
+  box-shadow:
+    inset 0 0 35px rgba(0, 0, 0, 0.45),
+    inset 3px 0 8px rgba(255, 255, 255, 0.12) !important;
+}
+
+.leaf-face.cover-back-outer {
+  box-shadow:
+    inset 0 0 35px rgba(0, 0, 0, 0.45),
+    inset -3px 0 8px rgba(255, 255, 255, 0.1) !important;
+}
+
+.is-mobile .leaf-face.cover-front,
+.is-mobile .leaf-face.cover-back-outer,
+.flipbook-container.is-mobile .leaf-face.cover-front,
+.flipbook-container.is-mobile .leaf-face.cover-back-outer {
+  border-radius: 8px !important;
+  box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* Corner Watermark Arc Ring for Inside Pages */
+.leaf-face:not(.is-cover)::before {
+  content: "";
+  position: absolute;
+  top: var(--watermark-offset);
+  right: var(--watermark-offset);
+  width: var(--watermark-size);
+  height: var(--watermark-size);
+  border-radius: 50%;
+  border: 1.5px solid rgba(14, 107, 78, 0.12);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.leaf-face.face-back:not(.is-cover)::before {
+  left: var(--watermark-offset);
+  right: auto;
+}
+
+/* Dynamic 3D Turn Lighting Shadow Overlay */
+.leaf-lighting-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--anim-speed) ease;
+  z-index: 20;
+}
+
+.face-front .leaf-lighting-overlay {
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.28) 0%,
+    rgba(0, 0, 0, 0) 60%
+  );
+}
+
+.face-back .leaf-lighting-overlay {
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.28) 0%,
+    rgba(0, 0, 0, 0) 60%
+  );
+}
+
+.book-leaf.is-flipping .leaf-lighting-overlay {
+  opacity: 1;
+}
+
+/* Inner Content Container - Natural Physical Page Surface (Zero Scrolling) */
+.a4-page-canvas {
+  width: 480px;
+  height: 679px;
+  transform-origin: top left;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+  user-select: none;
+  pointer-events: auto;
+}
+
+.page-content-wrapper {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  width: 100%;
+  padding: 24px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden !important;
+  box-sizing: border-box;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.page-content-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+/* Luxury Cover Corner Ornaments */
+.cover-corner-ornament {
+  position: absolute;
+  width: calc(14px * var(--page-scale));
+  height: calc(14px * var(--page-scale));
+  border: 2px solid var(--gold-accent);
+}
+.cover-corner-ornament.tl {
+  top: -1px;
+  left: -1px;
+  border-right: none;
+  border-bottom: none;
+}
+.cover-corner-ornament.tr {
+  top: -1px;
+  right: -1px;
+  border-left: none;
+  border-bottom: none;
+}
+.cover-corner-ornament.bl {
+  bottom: -1px;
+  left: -1px;
+  border-right: none;
+  border-top: none;
+}
+.cover-corner-ornament.br {
+  bottom: -1px;
+  right: -1px;
+  border-left: none;
+  border-top: none;
+}
+
+@media (max-width: 768px) {
+  #flipbook-wrapper {
+    padding: 8px;
+  }
+  .top-floating-controls {
+    top: 12px;
+    right: 12px;
+    gap: 8px;
+  }
+  .float-icon-btn {
+    width: 38px;
+    height: 38px;
+  }
+  .float-icon-btn svg {
+    width: 19px;
+    height: 19px;
+  }
+  .corner-nav-btn {
+    bottom: 12px;
+    width: 44px;
+    height: 44px;
+  }
+  .corner-nav-btn svg {
+    width: 24px;
+    height: 24px;
+  }
+  .corner-nav-btn.btn-prev-corner {
+    left: 12px;
+  }
+  .corner-nav-btn.btn-next-corner {
+    right: 12px;
+  }
+}
+
+/* StPageFlip 3D Corner-Curl Engine Overrides */
+.stf__parent {
+  position: relative !important;
+  display: block !important;
+  box-sizing: border-box !important;
+  transform: translateZ(0);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.stf__wrapper {
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+  box-sizing: border-box !important;
+  padding-bottom: 0 !important;
+}
+
+.stf__parent canvas {
+  position: absolute !important;
+  width: 100% !important;
+  height: 100% !important;
+  left: 0 !important;
+  top: 0 !important;
+  pointer-events: none;
+}
+
+.stf__block {
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  box-sizing: border-box !important;
+  perspective: 2200px !important;
+}
+
+.stf__item {
+  display: none;
+  position: absolute !important;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  will-change: transform, clip-path;
+}
+
+.stf__outerShadow,
+.stf__innerShadow,
+.stf__hardShadow,
+.stf__hardInnerShadow {
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  pointer-events: none !important;
+  will-change: transform, opacity, clip-path;
+}
+
